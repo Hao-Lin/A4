@@ -88,33 +88,6 @@ MyDB_RecordIteratorAltPtr MyDB_BPlusTreeReaderWriter :: getRangeIteratorAlt (MyD
 
 }
 
-//MyDB_RecordIteratorAltPtr MyDB_BPlusTreeReaderWriter :: getRangeIteratorAlt (MyDB_AttValPtr low, MyDB_AttValPtr high) {
-//
-//	// this is the list of pages that we need to iterate over
-//	vector <MyDB_PageReaderWriter> list;
-//
-//	discoverPages(rootLocation, list, low, high);
-//
-//	// for various comparisons
-//	MyDB_RecordPtr lhs = getEmptyRecord ();
-//	MyDB_RecordPtr rhs = getEmptyRecord ();
-//	MyDB_RecordPtr myRec = getEmptyRecord ();
-//	MyDB_INRecordPtr llow = getINRecord ();
-//	llow->setKey (low);
-//	MyDB_INRecordPtr hhigh = getINRecord ();
-//	hhigh->setKey (high);
-//
-//	// build the comparison functions
-//	function <bool ()> comparator = buildComparator (lhs, rhs);
-//	function <bool ()> lowComparator = buildComparator (myRec, llow);
-//	function <bool ()> highComparator = buildComparator (hhigh, myRec);
-//
-//	// and build the iterator
-//	return make_shared <MyDB_PageListIteratorSelfSortingAlt> (list, lhs, rhs, comparator, myRec, lowComparator, highComparator, false);
-//}
-
-
-
 bool MyDB_BPlusTreeReaderWriter :: discoverPages (int whichPage, vector <MyDB_PageReaderWriter> &list, MyDB_AttValPtr low, MyDB_AttValPtr high) {
 
 	// target page
@@ -179,13 +152,15 @@ bool MyDB_BPlusTreeReaderWriter :: discoverPages (int whichPage, vector <MyDB_Pa
 
 void MyDB_BPlusTreeReaderWriter :: append (MyDB_RecordPtr newRec) {
 
-	if (getNumPages () > 1) {
+	//  dan't have data, need to build the tree
+    if (getNumPages () > 1) {
 
 		MyDB_RecordPtr ans = append (rootLocation, newRec);
 
 		if (ans == nullptr) {}
-		else {
 
+		//  the page split
+		else {
 			int newLoc = getTable () -> lastPage () + 1;
 
 			getTable ()->setLastPage (newLoc);
@@ -204,6 +179,8 @@ void MyDB_BPlusTreeReaderWriter :: append (MyDB_RecordPtr newRec) {
 		}
 
 	}
+
+	// there are data in the tree originally
 	else {
 		MyDB_PageReaderWriter root = (*this)[0];
 		rootLocation = 0;
@@ -235,6 +212,7 @@ MyDB_RecordPtr MyDB_BPlusTreeReaderWriter :: split (MyDB_PageReaderWriter target
 	getTable() -> setLastPage(newLocation);
 	MyDB_PageReaderWriter newPage = (*this)[newLocation];
 
+	//  build comparator
 	if (targetPage.getType () == DirectoryPage) {
 		left = getINRecord ();
 		right = getINRecord ();
@@ -257,6 +235,7 @@ MyDB_RecordPtr MyDB_BPlusTreeReaderWriter :: split (MyDB_PageReaderWriter target
 
 	int used = sizeof(size_t)*2;
 
+	//  compute the position
 	while (true) {
 		if (used == *((size_t *) ((sizeof(size_t) +(char *) tempPage)))) {
 			break;
@@ -285,7 +264,8 @@ MyDB_RecordPtr MyDB_BPlusTreeReaderWriter :: split (MyDB_PageReaderWriter target
 
 	int count = -1;
 	int size = loc.size();
-	
+
+	// put the data in the new page
 	for(int i = 0; i < loc.size(); i++){
 
 		count++;
@@ -464,5 +444,3 @@ MyDB_PageReaderWriterPtr MyDB_BPlusTreeReaderWriter :: getWithID(int index) {
 }
 
 #endif
-
-

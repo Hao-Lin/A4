@@ -20,6 +20,21 @@ add_executable(A4
         Build/supplierBig.tbl
         Build/supplierBigSorted.tbl
         Build/supplierSmall.tbl
+        cmake-build-debug/A4
+        cmake-build-debug/A4.cbp
+        cmake-build-debug/catFile
+        cmake-build-debug/cmake_install.cmake
+        cmake-build-debug/CMakeCache.txt
+        cmake-build-debug/empty.tbl
+        cmake-build-debug/indexvalue.tbl
+        cmake-build-debug/indexvalueBigSorted.tbl
+        cmake-build-debug/indexvalueBigSortedTwo.tbl
+        cmake-build-debug/Makefile
+        cmake-build-debug/supplier.bin
+        cmake-build-debug/supplier.tbl
+        cmake-build-debug/supplierBig.tbl
+        cmake-build-debug/supplierBigSorted.tbl
+        cmake-build-debug/supplierSmall.tbl
         Main/BPlusTest/source/BPlusQUnit.cc
         Main/BufferMgr/headers/CheckLRU.h
         Main/BufferMgr/headers/MyDB_BufferManager.h
@@ -70,4 +85,6 @@ add_executable(A4
         Main/Record/source/MyDB_AttVal.cc
         Main/Record/source/MyDB_Record.cc
         Main/RecordTest/source/RecordQUnit.cc
-        Main/SortTest/source/SortQUnit.cc)
+        Main/SortTest/source/SortQUnit.cc
+        CMakeLists.txt
+        README.md)
